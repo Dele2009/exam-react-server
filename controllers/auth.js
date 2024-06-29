@@ -165,7 +165,7 @@ const student = async (req, res) => {
 
         })
 
-        // await student.save()
+        await student.save()
         return res.json({ message: 'Student account created successfully', student })
 
 
