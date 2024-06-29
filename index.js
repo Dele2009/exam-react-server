@@ -39,7 +39,9 @@ mongoose.connect(mu).then(()=>{
 
 
 
-
+app.get('/', (_,res)=>{
+    res.send('App running succesfully')
+})
 app.use('/exam', exam_routes)
 app.use('/auth', auth_routes)
 
