@@ -33,14 +33,14 @@ const createExam = async (req, res) => {
 
 const GetExams = async (req, res) => {
     try {
-        const { _id, title, subject, questions } = await Exam.find()
-        const Exams = {
-            _id,
-            title,
-            subject,
-            questionsLength: questions.length
-        }
-        return res.status(201).json({ Exams })
+        const exams = await Exam.find()
+        const simplifiedExams = exams.map(exam => ({
+            _id: exam._id,
+            title: exam.title,
+            subject: exam.subject,
+            questionsLength: exam.questions.length
+        }));
+        return res.status(201).json({ Exams: simplifiedExams })
 
     } catch (error) {
         console.log(error)
@@ -50,14 +50,14 @@ const GetExams = async (req, res) => {
 
 const get_Exam = async (req, res) => {
     try {
-        const {id} = req.params
+        const { id } = req.params
         console.log(id)
         const Exam = await Exam.findById(id);
         if (!Exam) return res.status(404).json({ message: 'Exam not found', error: true });
 
         console.log(Exam)
         return res.status(201).json({ Exam });
-    } catch (err) {
+    } catch (error) {
         console.log(error)
         return res.status(500).send('Server error');
     }
