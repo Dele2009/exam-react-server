@@ -33,7 +33,13 @@ const createExam = async (req, res) => {
 
 const GetExams = async (req, res) => {
     try {
-        const Exams = await Exam.find()
+        const { _id, title, subject, questions } = await Exam.find()
+        const Exams = {
+            _id,
+            title,
+            subject,
+            questionsLength: questions.length
+        }
         return res.status(201).json({ Exams })
 
     } catch (error) {
@@ -42,7 +48,23 @@ const GetExams = async (req, res) => {
     }
 }
 
+const get_Exam = async (req, res) => {
+    try {
+        const {id} = req.params
+        console.log(id)
+        const Exam = await Exam.findById(id);
+        if (!Exam) return res.status(404).json({ message: 'Exam not found', error: true });
+
+        console.log(Exam)
+        return res.status(201).json({ Exam });
+    } catch (err) {
+        console.log(error)
+        return res.status(500).send('Server error');
+    }
+}
+
 module.exports = {
     createExam,
-    GetExams
+    GetExams,
+    get_Exam
 }

@@ -11,7 +11,13 @@ const Sign_in = async (req, res) => {
     console.log(req.body)
     const { email, password } = req.body;
     try {
-        const user = await User.findOne({ email })
+        const user = await User.findOne({
+            $or: [
+                { email: email },
+                { username: email }
+            ]
+        });
+
         if (!user) {
             console.log('email does not exist')
             return res.status(400).json({ message: 'Invalid email or password', error: true });
@@ -71,10 +77,10 @@ const admin = async (req, res) => {
         });
 
         await admin.save();
-        return res.status(201).json(admin);
+        return res.status(201).json({ message: 'Admin account Successfully', error: true, admin });
     } catch (error) {
         console.error(error);
-        return res.status(400).json({ message: 'internal server error' });
+        return res.status(400).json({ message: 'internal server error', error: true });
     }
 }
 
@@ -114,10 +120,10 @@ const teacher = async (req, res) => {
             classroomAssigned,
         });
         await teacher.save();
-        res.status(201).json({ message: 'Teacher account created successfully', teacher });
+        return res.status(201).json({ message: 'Teacher account successfully', error: true, teacher });
     } catch (error) {
         console.error(error)
-        res.status(400).json({ message: "internal error" });
+        return res.status(400).json({ message: "internal error", error: true });
     }
 }
 
@@ -166,12 +172,12 @@ const student = async (req, res) => {
         })
 
         await student.save()
-        return res.json({ message: 'Student account created successfully', student })
+        return res.json({ message: 'Student account successfully', error: false, student })
 
 
     } catch (error) {
         console.error(error)
-        return res.json({ message: 'Internal server error, try later', error })
+        return res.json({ message: 'Internal server error, try later', error: true })
     }
 }
 
