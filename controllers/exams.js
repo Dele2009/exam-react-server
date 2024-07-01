@@ -52,11 +52,11 @@ const get_Exam = async (req, res) => {
     try {
         const { id } = req.params
         console.log(id)
-        const Exam = await Exam.findById(id);
-        if (!Exam) return res.status(404).json({ message: 'Exam not found', error: true });
+        const exam = await Exam.findById(id);
+        if (!exam) return res.status(404).json({ message: 'Exam not found', error: true });
 
-        console.log(Exam)
-        return res.status(201).json({ Exam });
+        console.log(exam)
+        return res.status(201).json({ Exam:exam });
     } catch (error) {
         console.log(error)
         return res.status(500).send('Server error');
