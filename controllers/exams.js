@@ -3,7 +3,7 @@ const Exam = require('../models/exam')
 const createExam = async (req, res) => {
     try {
         console.log(req.body)
-        const { title, subject, questions } = req.body
+        const { title, subject, questions ,duration } = req.body
         if (!title || !subject || !questions || !Array.isArray(questions) || questions.length === 0) {
             return res.status(400).json({ message: 'Invalid data submitted', error: true });
         }
@@ -18,7 +18,7 @@ const createExam = async (req, res) => {
             };
         });
 
-        const exam = new Exam({ title, subject, questions: formattedQuestions });
+        const exam = new Exam({ title, subject,duration, questions: formattedQuestions });
         await exam.save();
 
         // await question.save()

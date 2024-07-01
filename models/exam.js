@@ -15,6 +15,16 @@ const questionSchema = new mongoose.Schema({
 const examSchema = new mongoose.Schema({
     title: { type: String, required: true },
     subject: { type: String, required: true },
+    duration: {
+        hours :{
+            type: String,
+            required: true
+        },
+        minutes:{
+            type: String,
+            required: true
+        }
+    },
     questions: [questionSchema],
     createdAt: { type: Date, default: Date.now }
 });

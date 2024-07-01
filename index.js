@@ -13,8 +13,8 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
-const mu = process.env.MONGO_URI
-// const mu = 'mongodb://localhost:27017/exam-system'
+// const mu = process.env.MONGO_URI
+const mu = 'mongodb://localhost:27017/exam-system'
 
 mongoose.connect(mu).then(()=>{
     console.log('db connected')
