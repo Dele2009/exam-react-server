@@ -11,8 +11,8 @@ const userSchema = new mongoose.Schema({
     dob: { type: Date, required: true },
     address: { type: String, required: true },
     profilePicture: { type: String },
-    createdAt: { type: Date, default: Date.now }
-});
+    active:{type: Boolean, default: false}
+}, {timestamps: true});
 
 
 const User = mongoose.model('User', userSchema);

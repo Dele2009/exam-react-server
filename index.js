@@ -6,6 +6,7 @@ require('dotenv').config()
 
 const exam_routes = require('./routes/exam_route')
 const auth_routes = require('./routes/auth_routes')
+const action_routes = require('./routes/action_routes')
 
 const app = express()
 
@@ -44,6 +45,7 @@ app.get('/', (_,res)=>{
 })
 app.use('/exam', exam_routes)
 app.use('/auth', auth_routes)
+app.use('/admin', action_routes)
 
 const PORT =  5000
 
