@@ -27,6 +27,10 @@ const Sign_in = async (req, res) => {
             console.log('password not matched')
             return res.status(400).json({ message: 'Invalid email or password', error: true });
         }
+        if (!user.active) {
+            console.log('user disabled')
+            return res.status(400).json({ message: ' !! Blocked: contact admin for assistance', error: true });
+        }
         const token = jwt.sign({ _id: user._id, role: user.__t }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({
             message: 'Login successful ',
@@ -77,7 +81,7 @@ const admin = async (req, res) => {
         });
 
         await admin.save();
-        return res.status(201).json({ message: 'Admin account Successfully', error: true, admin });
+        return res.status(201).json({ message: 'Admin account Successfully',error:false,  admin });
     } catch (error) {
         console.error(error);
         return res.status(400).json({ message: 'internal server error', error: true });
@@ -120,7 +124,7 @@ const teacher = async (req, res) => {
             classroomAssigned,
         });
         await teacher.save();
-        return res.status(201).json({ message: 'Teacher account successfully', error: true, teacher });
+        return res.status(201).json({ message: 'Teacher account successfully' ,error:false,teacher });
     } catch (error) {
         console.error(error)
         return res.status(400).json({ message: "internal error", error: true });
@@ -172,7 +176,7 @@ const student = async (req, res) => {
         })
 
         await student.save()
-        return res.json({ message: 'Student account successfully', error: false, student })
+        return res.json({ message: 'Student account successfully', error:false,student })
 
 
     } catch (error) {
