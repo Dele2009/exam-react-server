@@ -32,13 +32,15 @@ const Sign_in = async (req, res) => {
             return res.status(400).json({ message: ' !! Blocked: contact admin for assistance', error: true });
         }
         const token = jwt.sign({ _id: user._id, role: user.__t }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({
+        res.status(200).json({
             message: 'Login successful ',
             error: false,
             role: user.__t,
             info: {
+                _id: user._id,
                 name: user.firstName,
-                email: user.email
+                email: user.email,
+                avatar: user.profilePicture
             },
             token
         });
@@ -84,7 +86,7 @@ const admin = async (req, res) => {
         return res.status(201).json({ message: 'Admin account Successfully',error:false,  admin });
     } catch (error) {
         console.error(error);
-        return res.status(400).json({ message: 'internal server error', error: true });
+        return res.status(500).json({ message: 'internal server error', error: true });
     }
 }
 
@@ -127,7 +129,7 @@ const teacher = async (req, res) => {
         return res.status(201).json({ message: 'Teacher account successfully' ,error:false,teacher });
     } catch (error) {
         console.error(error)
-        return res.status(400).json({ message: "internal error", error: true });
+        return res.status(500).json({ message: "internal error", error: true });
     }
 }
 
@@ -176,12 +178,12 @@ const student = async (req, res) => {
         })
 
         await student.save()
-        return res.json({ message: 'Student account successfully', error:false,student })
+        return res.status(201).json({ message: 'Student account successfully', error:false,student })
 
 
     } catch (error) {
         console.error(error)
-        return res.json({ message: 'Internal server error, try later', error: true })
+        return res.status(500).json({ message: 'Internal server error, try later', error: true })
     }
 }
 

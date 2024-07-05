@@ -1,5 +1,6 @@
 const Exam = require('../models/exam')
 
+
 const createExam = async (req, res) => {
     try {
         console.log(req.body)
@@ -27,19 +28,24 @@ const createExam = async (req, res) => {
     } catch (error) {
         console.log(error)
         return res.json({ message: "Internal server error", error: true })
-
     }
 }
 
 const GetExams = async (req, res) => {
     try {
-        const exams = await Exam.find()
-        const simplifiedExams = exams.map(exam => ({
-            _id: exam._id,
-            title: exam.title,
-            subject: exam.subject,
-            questionsLength: exam.questions.length
-        }));
+        const exams = req.exams
+        console.log(exams)
+        const simplifiedExams = exams
+            .filter(exam => exam.active !== false)
+            .map(exam => ({
+                _id: exam._id,
+                title: exam.title,
+                subject: exam.subject,
+                questionsLength: exam.questions.length,
+                duration: exam.duration,
+                createdAt: exam.createdAt
+            }));
+        console.log(simplifiedExams)
         return res.status(201).json({ Exams: simplifiedExams })
 
     } catch (error) {
@@ -50,9 +56,8 @@ const GetExams = async (req, res) => {
 
 const get_Exam = async (req, res) => {
     try {
-        const { id } = req.params
-        console.log(id)
-        const exam = await Exam.findById(id);
+        
+        const exam = res.exam
         if (!exam) return res.status(404).json({ message: 'Exam not found', error: true });
 
         console.log(exam)
@@ -63,8 +68,12 @@ const get_Exam = async (req, res) => {
     }
 }
 
+
+
+
 module.exports = {
     createExam,
     GetExams,
-    get_Exam
+    get_Exam,
+    
 }

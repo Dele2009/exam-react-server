@@ -17,17 +17,16 @@ const examSchema = new mongoose.Schema({
     subject: { type: String, required: true },
     duration: {
         hours :{
-            type: String,
-            required: true
+            type: String
         },
         minutes:{
-            type: String,
-            required: true
+            type: String
         }
     },
     questions: [questionSchema],
-    createdAt: { type: Date, default: Date.now }
-});
+    active:{type: Boolean, default: false},
+    createdAt:{type:Date}
+},{timeStamps: true});
 
 const Exam = mongoose.model('Question', examSchema);
 

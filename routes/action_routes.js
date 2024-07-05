@@ -1,9 +1,18 @@
 const express = require('express')
-const {
+const{
     getAllUsers,
     deleteUser,
-    disableUser
+    disableUser,
+    EditExam,
+    GetAllExams,
+    DeleteExam
 } = require('../controllers/action')
+
+const {
+    getAllExams,
+    getExambyId
+} = require('../middleware/utilities/getExams')
+
 
 
 
@@ -14,5 +23,11 @@ router.get('/getusers', getAllUsers)
 router.delete('/deleteuser/:id', deleteUser);
 
 router.put('/setUserstatus/:id', disableUser);
+
+router.get('/getexams', getAllExams, GetAllExams);
+
+router.delete('/deleteexam/:id', DeleteExam)
+router.put('/setexamstatus/:id', getExambyId, EditExam);
+
 
 module.exports = router
