@@ -40,7 +40,8 @@ const Sign_in = async (req, res) => {
                 _id: user._id,
                 name: user.firstName,
                 email: user.email,
-                avatar: user.profilePicture
+                avatar: user.profilePicture,
+                gender: user.gender
             },
             token
         });
