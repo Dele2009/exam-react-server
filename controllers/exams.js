@@ -3,7 +3,7 @@ const Exam = require('../models/exam')
 
 const createExam = async (req, res) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const { title, subject, questions ,duration } = req.body
         if (!title || !subject || !questions || !Array.isArray(questions) || questions.length === 0) {
             return res.status(400).json({ message: 'Invalid data submitted', error: true });
@@ -23,7 +23,7 @@ const createExam = async (req, res) => {
         await exam.save();
 
         // await question.save()
-        console.log(exam)
+        // console.log(exam)
         return res.json({ message: "Exam submitted successfully", error: false })
     } catch (error) {
         console.log(error)
@@ -34,7 +34,7 @@ const createExam = async (req, res) => {
 const GetExams = async (req, res) => {
     try {
         const exams = req.exams
-        console.log(exams)
+        // console.log(exams)
         const simplifiedExams = exams
             .filter(exam => exam.active !== false)
             .map(exam => ({
@@ -45,22 +45,22 @@ const GetExams = async (req, res) => {
                 duration: exam.duration,
                 createdAt: exam.createdAt
             }));
-        console.log(simplifiedExams)
+        // console.log(simplifiedExams)
         return res.status(201).json({ Exams: simplifiedExams })
 
     } catch (error) {
         console.log(error)
-        return res.status(401).json({ message: 'Internal server error', error: true })
+        return res.status(500).json({ message: 'Internal server error', error: true })
     }
 }
 
 const get_Exam = async (req, res) => {
     try {
         
-        const exam = res.exam
+        const exam = req.exam
         if (!exam) return res.status(404).json({ message: 'Exam not found', error: true });
 
-        console.log(exam)
+        // console.log(exam)
         return res.status(201).json({ Exam:exam });
     } catch (error) {
         console.log(error)

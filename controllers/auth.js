@@ -31,7 +31,7 @@ const Sign_in = async (req, res) => {
             console.log('user disabled')
             return res.status(400).json({ message: ' !! Blocked: contact admin for assistance', error: true });
         }
-        const token = jwt.sign({ _id: user._id, role: user.__t }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ _id: user._id, role: user.__t }, process.env.JWT_SECRET, { expiresIn: '1hr' });
         res.status(200).json({
             message: 'Login successful ',
             error: false,
@@ -39,6 +39,7 @@ const Sign_in = async (req, res) => {
             info: {
                 _id: user._id,
                 name: user.firstName,
+                username: user.username,
                 email: user.email,
                 avatar: user.profilePicture,
                 gender: user.gender
@@ -52,7 +53,7 @@ const Sign_in = async (req, res) => {
 
 const admin = async (req, res) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
 
         const {
             firstName,
@@ -93,7 +94,7 @@ const admin = async (req, res) => {
 
 const teacher = async (req, res) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const {
             firstName,
             lastName,
@@ -136,7 +137,7 @@ const teacher = async (req, res) => {
 
 const student = async (req, res) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         const {
             firstName,
             lastName,

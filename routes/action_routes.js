@@ -13,10 +13,11 @@ const {
     getExambyId
 } = require('../middleware/utilities/getExams')
 
-
+const requireAuth = require('../middleware/requireAuth')
 
 
 const router = express.Router()
+router.use(requireAuth)
 
 router.get('/getusers', getAllUsers)
 

@@ -9,7 +9,7 @@ const getAllUsers = async (req, res) => {
             console.log('No users')
             return res.status(404).json({ message: 'No users available', error: false })
         }
-        console.log(users)
+        // console.log(users)
         return res.status(201).json({ Users: users })
     } catch (error) {
         console.log('error fetching users')
@@ -34,16 +34,16 @@ const disableUser = async (req, res) => {
     try {
         const { id } = req.params
         const { active } = req.body
-        console.log(id,active)
+        // console.log(id,active)
         const user = await User.findById(id);
         if (!user) {
             console.log('user ot found')
             return res.status(404).json({ message: 'User not found', error: true });
         }
-        console.log(user)
+        // console.log(user)
         user.active = active;
         await user.save();
-        console.log('user saved', user)
+        // console.log('user saved', user)
         return res.status(201).json({ message: 'User status updated successfully', error:false });
     } catch (error) {
         console.error(error)
@@ -61,11 +61,11 @@ const EditExam = async (req, res) => {
         //     console.log('exam not found')
         //     return res.status(404).json({ message: 'exam not found', error: true });
         // }
-        const exam = res.exam
-        console.log('previous',exam)
+        const exam = req.exam
+        // console.log('previous',exam)
         exam.active = active;
         const updateExam = await exam.save();
-        console.log('user saved', updateExam)
+        // console.log('user saved', updateExam)
         return res.status(201).json({ message: 'Exam status updated successfully', error:false });
 
     }catch(error){
@@ -82,7 +82,7 @@ const DeleteExam = async (req,res)=>{
         if (!ExamToDelete) {
             return res.status(404).json({ message: 'Cannot find exam', error:true });
         }
-        console.log(ExamToDelete)
+        // console.log(ExamToDelete)
       
         console.log('exam delete')
         return res.status(200).json({message: 'Exam delete successfull', error: true})
