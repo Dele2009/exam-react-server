@@ -48,7 +48,12 @@ const Sign_in = async (req, res) => {
             address
         } = user
 
-        const token = jwt.sign({ _id, role:__t }, process.env.JWT_SECRET, { expiresIn: '2hr' });
+        const token = jwt.sign(
+            { _id, role:__t }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: '3hr' }
+        );
+        
         res.status(200).json({
             message: 'Login successful ',
             error: false,

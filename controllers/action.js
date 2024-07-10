@@ -44,7 +44,7 @@ const disableUser = async (req, res) => {
         user.active = active;
         await user.save();
         // console.log('user saved', user)
-        return res.status(201).json({ message: 'User status updated successfully', error:false });
+        return res.status(201).json({ message: 'User status updated successfully', error: false });
     } catch (error) {
         console.error(error)
         return res.status(500).json({ message: error.message, error: true });
@@ -52,7 +52,7 @@ const disableUser = async (req, res) => {
 }
 
 const EditExam = async (req, res) => {
-    try{
+    try {
         // const { id } = req.params
         const { active } = req.body
         // console.log(id,active)
@@ -66,39 +66,88 @@ const EditExam = async (req, res) => {
         exam.active = active;
         const updateExam = await exam.save();
         // console.log('user saved', updateExam)
-        return res.status(201).json({ message: 'Exam status updated successfully', error:false });
+        return res.status(201).json({ message: 'Exam status updated successfully', error: false });
 
-    }catch(error){
+    } catch (error) {
         console.error(error)
         return res.status(500).json({ message: error.message, error: true });
     }
-    
+
 }
 
-const DeleteExam = async (req,res)=>{
-    try{
-        const {id} = req.params
+const DeleteExam = async (req, res) => {
+    try {
+        const { id } = req.params
         const ExamToDelete = await Exam.findByIdAndDelete(id)
         if (!ExamToDelete) {
-            return res.status(404).json({ message: 'Cannot find exam', error:true });
+            return res.status(404).json({ message: 'Cannot find exam', error: true });
         }
         // console.log(ExamToDelete)
-      
+
         console.log('exam delete')
-        return res.status(200).json({message: 'Exam delete successfull', error: true})
-    }catch(error){
+        return res.status(200).json({ message: 'Exam delete successfull', error: true })
+    } catch (error) {
         console.log('error deleting exam =>', error)
-        return res.status(500).json({message: error.message || 'internal server error', error: true})
+        return res.status(500).json({ message: error.message || 'internal server error', error: true })
     }
 }
 
-const GetAllExams = (req,res) =>{
-    try{
+const GetAllExams = (req, res) => {
+    try {
         const exams = req.exams
         return res.status(200).json({ Exams: exams })
-    }catch(error){
+    } catch (error) {
         console.log(error)
-        return res.status(500).json({message: error.message || 'internal server error', error: true})
+        return res.status(500).json({ message: error.message || 'internal server error', error: true })
+    }
+}
+
+const GetAppAnalytics = async (req, res) => {
+    try {
+        const examsPerMonth = await Exam.aggregate([
+            {
+                $group: {
+                    _id: { month: { $month: "$createdAt" }, year: { $year: "$createdAt" } },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $sort: { "_id.year": 1, "_id.month": 1 }
+            }
+        ]);
+
+        const popularSubjects = await Exam.aggregate([
+            {
+                $group: {
+                    _id: "$subject",
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $sort: { count: -1 }
+            },
+            {
+                $limit: 5 // Top 5 popular subjects
+            }
+        ]);
+
+        const examStatus = await Exam.aggregate([
+            { $group: { _id: "$active", count: { $sum: 1 } } }
+        ]);
+
+        console.log({
+            examsPerMonth,
+            popularSubjects,
+            examStatus
+        })
+        return res.status(200).json({
+            examsPerMonth,
+            popularSubjects,
+            examStatus
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: error.message, error: true })
     }
 }
 
@@ -108,5 +157,6 @@ module.exports = {
     disableUser,
     EditExam,
     GetAllExams,
-    DeleteExam
+    DeleteExam,
+    GetAppAnalytics
 }

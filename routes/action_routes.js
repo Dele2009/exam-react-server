@@ -5,7 +5,8 @@ const{
     disableUser,
     EditExam,
     GetAllExams,
-    DeleteExam
+    DeleteExam,
+    GetAppAnalytics
 } = require('../controllers/action')
 
 const {
@@ -29,6 +30,6 @@ router.get('/getexams', getAllExams, GetAllExams);
 
 router.delete('/deleteexam/:id', DeleteExam)
 router.put('/setexamstatus/:id', getExambyId, EditExam);
-
+router.get('/getAppAnalytics', GetAppAnalytics)
 
 module.exports = router
