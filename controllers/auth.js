@@ -9,12 +9,14 @@ const bcrypt = require('bcrypt');
 
 const Sign_in = async (req, res) => {
     console.log(req.body)
-    const { email, password } = req.body;
+    // const { email, password } = req.body;
+    const Email = req.body.email
+    const password = req.body.password
     try {
         const user = await User.findOne({
             $or: [
-                { email: email },
-                { username: email }
+                { email: Email },
+                { username: Email }
             ]
         });
 
@@ -31,18 +33,38 @@ const Sign_in = async (req, res) => {
             console.log('user disabled')
             return res.status(400).json({ message: ' !! Blocked: contact admin for assistance', error: true });
         }
-        const token = jwt.sign({ _id: user._id, role: user.__t }, process.env.JWT_SECRET, { expiresIn: '1hr' });
+        const {
+            _id,
+            firstName,
+            lastName,
+            __t,
+            username,
+            phone,
+            dob,
+            email,
+            profilePicture,
+            gender,
+            active,
+            address
+        } = user
+
+        const token = jwt.sign({ _id, role:__t }, process.env.JWT_SECRET, { expiresIn: '2hr' });
         res.status(200).json({
             message: 'Login successful ',
             error: false,
-            role: user.__t,
+            role: __t,
             info: {
-                _id: user._id,
-                name: user.firstName,
-                username: user.username,
-                email: user.email,
-                avatar: user.profilePicture,
-                gender: user.gender
+                _id,
+                firstName,
+                lastName,
+                username,
+                phone,
+                dob,
+                email,
+                avatar:profilePicture,
+                gender,
+                active,
+                address
             },
             token
         });
