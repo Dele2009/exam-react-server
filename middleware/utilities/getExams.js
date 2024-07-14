@@ -3,7 +3,7 @@ const Exam = require('../../models/exam')
 
 async function getExambyId(req, res, next) {
     try {
-        const exam = await Exam.findById(req.params.id);
+        const exam = await Exam.findById(req.params.examId);
         if (exam == null) {
             return res.status(404).json({ message: 'Cannot find exam', error:true });
         }

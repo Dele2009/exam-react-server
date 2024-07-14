@@ -1,4 +1,5 @@
 const Exam = require('../models/exam')
+const Result = require('../models/result');
 
 
 const createExam = async (req, res) => {
@@ -32,11 +33,15 @@ const createExam = async (req, res) => {
 }
 
 const GetExams = async (req, res) => {
+    const {studentId} = req.body // Assuming you have the student ID in the request object
     try {
-        const exams = req.exams
-        // console.log(exams)
+        console.log(req.exams)
+        const takenExams = await Result.find({ student: studentId }).select('exam -_id');
+        const takenExamIds = takenExams.map(result => result.exam.toString());
+
+        const exams = req.exams;
         const simplifiedExams = exams
-            .filter(exam => exam.active !== false)
+            .filter(exam => exam.active !== false && !takenExamIds.includes(exam._id.toString()))
             .map(exam => ({
                 _id: exam._id,
                 title: exam.title,
@@ -45,14 +50,13 @@ const GetExams = async (req, res) => {
                 duration: exam.duration,
                 createdAt: exam.createdAt
             }));
-        // console.log(simplifiedExams)
-        return res.status(201).json({ Exams: simplifiedExams })
 
+        return res.status(201).json({ Exams: simplifiedExams });
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({ message: 'Internal server error', error: true })
+        console.log(error);
+        return res.status(500).json({ message: 'Internal server error', error: true });
     }
-}
+};
 
 const get_Exam = async (req, res) => {
     try {
@@ -69,11 +73,76 @@ const get_Exam = async (req, res) => {
 }
 
 
+const submitExam = async (req, res) => {
+    const {examId} = req.params
+    const { studentId, answers } = req.body;
+
+    try {
+        // Fetch the exam details
+        const exam = await Exam.findById(examId);
+        if (!exam) {
+            return res.status(404).json({ message: 'Exam not found', error: true });
+        }
+
+        // Process answers and calculate score
+        let score = 0;
+        const totalQuestions = exam.questions.length;
+        const resultAnswers = exam.questions.map((question, index) => {
+            const isCorrect = question.correctAnswer === answers[index];
+            if (isCorrect) score++;
+            return {
+                questionText: question.questionText,
+                selectedAnswer: answers[index],
+                correctAnswer: question.correctAnswer,
+                isCorrect,
+                image: question.image,
+            };
+        });
+
+        const result = new Result({
+            student: studentId,
+            exam: examId,
+            score,
+            totalQuestions,
+            answers: resultAnswers
+        });
+
+        await result.save();
+
+        return res.status(201).json({ message: 'Answers submitted successfully', resultId: result._id });
+    } catch (error) {
+        console.error('Error submitting answers:', error);
+        return res.status(500).json({ message: 'Internal server error', error: true });
+    }
+};
+
+const getResult = async (req, res) => {
+    const { resultId } = req.params;
+
+    try {
+        const result = await Result.findById(resultId)
+            .populate('student', 'firstName lastName email')
+            .populate('exam', 'title subject duration');
+
+        if (!result) {
+            return res.status(404).json({ message: 'Result not found', error: true });
+        }
+
+        console.log(result)
+
+        return res.status(200).json({ result });
+    } catch (error) {
+        console.error('Error fetching result:', error);
+        return res.status(500).json({ message: 'Internal server error', error: true });
+    }
+};
+
 
 
 module.exports = {
     createExam,
     GetExams,
     get_Exam,
-    
+    submitExam,
+    getResult
 }

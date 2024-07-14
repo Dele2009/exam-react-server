@@ -23,23 +23,6 @@ mongoose.connect(mu).then(()=>{
 });
 
 
-// const questionSchema = new mongoose.Schema({
-//     subject: String,
-//     questionText: String,
-//     options: [String],
-//     correctAnswer: String,
-//     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-// });
-
-// const examSchema = new mongoose.Schema({
-//     title: String,
-//     subject: String,
-//     questions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Question' }],
-//     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-// });
-
-
-
 
 app.get('/', (_,res)=>{
     res.send('App running succesfully')

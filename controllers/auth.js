@@ -112,6 +112,7 @@ const admin = async (req, res) => {
         });
 
         await admin.save();
+        console.log('new user created sucesful')
         return res.status(201).json({ message: 'Admin account Successfully',error:false,  admin });
     } catch (error) {
         console.error(error);
@@ -155,6 +156,7 @@ const teacher = async (req, res) => {
             classroomAssigned,
         });
         await teacher.save();
+        console.log('new user created sucesful')
         return res.status(201).json({ message: 'Teacher account successfully' ,error:false,teacher });
     } catch (error) {
         console.error(error)
@@ -207,6 +209,7 @@ const student = async (req, res) => {
         })
 
         await student.save()
+        console.log('new user created sucesful')
         return res.status(201).json({ message: 'Student account successfully', error:false,student })
 
 

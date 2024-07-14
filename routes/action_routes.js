@@ -28,8 +28,8 @@ router.put('/setUserstatus/:id', disableUser);
 
 router.get('/getexams', getAllExams, GetAllExams);
 
-router.delete('/deleteexam/:id', DeleteExam)
-router.put('/setexamstatus/:id', getExambyId, EditExam);
+router.delete('/deleteexam/:examId', DeleteExam)
+router.put('/setexamstatus/:examId', getExambyId, EditExam);
 router.get('/getAppAnalytics', GetAppAnalytics)
 
 module.exports = router

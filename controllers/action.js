@@ -77,15 +77,15 @@ const EditExam = async (req, res) => {
 
 const DeleteExam = async (req, res) => {
     try {
-        const { id } = req.params
-        const ExamToDelete = await Exam.findByIdAndDelete(id)
+        const { examId } = req.params
+        const ExamToDelete = await Exam.findByIdAndDelete(examId)
         if (!ExamToDelete) {
             return res.status(404).json({ message: 'Cannot find exam', error: true });
         }
         // console.log(ExamToDelete)
 
         console.log('exam delete')
-        return res.status(200).json({ message: 'Exam delete successfull', error: true })
+        return res.status(200).json({ message: 'Exam delete successfull', error: false })
     } catch (error) {
         console.log('error deleting exam =>', error)
         return res.status(500).json({ message: error.message || 'internal server error', error: true })
