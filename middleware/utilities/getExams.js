@@ -16,13 +16,14 @@ async function getExambyId(req, res, next) {
 
 const getAllExams = async (req,res,next)=>{
     try{
+        // console.log('student,,', req.body)
         const exams = await Exam.find().sort({createdAt: -1})
         if(!exams){
             console.log('exams not found')
             return res.status(404).json({message: 'No exam available', error: false})
         }
         req.exams = exams
-        console.log(exams)
+        // console.log(exams)
         next()
     }catch(error){
         console.log(error)

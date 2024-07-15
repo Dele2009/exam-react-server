@@ -33,13 +33,12 @@ const createExam = async (req, res) => {
 }
 
 const GetExams = async (req, res) => {
-    const {studentId} = req.body // Assuming you have the student ID in the request object
+    const { student } = req.query; // Extract the student ID from query parameters
     try {
-        console.log(req.exams)
-        const takenExams = await Result.find({ student: studentId }).select('exam -_id');
+        const takenExams = await Result.find({ student }).select('exam -_id');
         const takenExamIds = takenExams.map(result => result.exam.toString());
 
-        const exams = req.exams;
+        const exams = req.exams // Assuming you fetch all exams
         const simplifiedExams = exams
             .filter(exam => exam.active !== false && !takenExamIds.includes(exam._id.toString()))
             .map(exam => ({
