@@ -59,10 +59,19 @@ const GetExams = async (req, res) => {
 
 const get_Exam = async (req, res) => {
     try {
-        
+        const {_id} = req.query
         const exam = req.exam
-        if (!exam) return res.status(404).json({ message: 'Exam not found', error: true });
+        const examId = exam._id.toString()
+        const isExamTaken = await Result.findOne({ exam: examId})
+        // const resulId = TakenExam.exam.toString()
+        // const examId = exam._id.toString()
+        // console.log({resulId, examId})
+        // console.log(Boolean(resulId === examId))
 
+        if(isExamTaken){
+          return res.status(404).json({ message: 'This Exam is not avaliable to you', error: true });
+        }
+        if (!exam) return res.status(404).json({ message: 'Exam not found', error: true });
         // console.log(exam)
         return res.status(201).json({ Exam:exam });
     } catch (error) {
