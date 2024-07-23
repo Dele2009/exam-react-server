@@ -62,7 +62,12 @@ const get_Exam = async (req, res) => {
         const {_id} = req.query
         const exam = req.exam
         const examId = exam._id.toString()
-        const isExamTaken = await Result.findOne({ exam: examId})
+        const isExamTaken = await Result.findOne({ 
+            $and:[
+                {student: _id},
+                {exam: examId}
+            ]
+        })
         // const resulId = TakenExam.exam.toString()
         // const examId = exam._id.toString()
         // console.log({resulId, examId})
